@@ -1,0 +1,119 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block dashboard_role %}Student panel{% endblock %}
+{% block dashboard_title %}{{ assignment.title }}{% endblock %}
+{% block dashboard_subtitle %}
+Savollarni diqqat bilan o‘qing va to‘g‘ri javobni tanlang.
+{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'student_dashboard' %}">🏠 Bosh sahifa</a>
+<a href="{% url 'student_assignments' %}" class="active">📝 Topshiriqlar</a>
+<a href="{% url 'student_stars' %}">⭐ Yulduzlar</a>
+<a href="{% url 'collection' %}">🎁 Mukofotlar</a>
+<a href="{% url 'student_results' %}">📊 Natijalar</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div style="display:grid; gap:20px;">
+
+    <div class="panel-card">
+        <div style="display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; align-items:flex-start;">
+            <div style="flex:1; min-width:240px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+                    <span style="background:#dbeafe; color:#1d4ed8; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:700;">
+                        {{ assignment.subject.title }}
+                    </span>
+                    <span style="background:#fef3c7; color:#b45309; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:700;">
+                        {{ assignment.points }} ball
+                    </span>
+                    <span style="background:#ede9fe; color:#6d28d9; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:700;">
+                        {{ questions|length }} ta savol
+                    </span>
+                </div>
+
+                <h2 style="margin:0 0 8px 0; color:#243b6b;">{{ assignment.title }}</h2>
+                <p style="margin:0; color:#6b7280; line-height:1.7;">
+                    {{ assignment.description|default:"Topshiriq tavsifi mavjud emas." }}
+                </p>
+            </div>
+
+            <div style="background:#f8fbff; border:1px solid #e5ecf6; border-radius:18px; padding:16px; min-width:220px;">
+                <div style="font-size:14px; color:#64748b; margin-bottom:8px;">Motivatsiya</div>
+                <div style="font-weight:800; color:#243b6b; font-size:18px; margin-bottom:6px;">Siz buni uddalaysiz! 🚀</div>
+                <div style="color:#6b7280; font-size:14px; line-height:1.6;">
+                    Har bir to‘g‘ri javob sizga ball va yulduz olib keladi.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div style="display:grid; gap:18px;">
+            {% for question in questions %}
+            <div class="panel-card" style="border:1px solid #e5ecf6;">
+                <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:16px;">
+                    <div style="
+                        width:42px;
+                        height:42px;
+                        min-width:42px;
+                        border-radius:14px;
+                        background:#eef2ff;
+                        color:#4338ca;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-weight:800;
+                    ">
+                        {{ forloop.counter }}
+                    </div>
+
+                    <div style="flex:1;">
+                        <h3 style="margin:0 0 8px 0; color:#243b6b;">{{ question.text }}</h3>
+
+                        {% if question.image %}
+                        <div style="margin-top:10px;">
+                            <img src="{{ question.image.url }}" alt="Savol rasmi" style="max-width:220px; border-radius:16px; border:1px solid #e5ecf6;">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    {% for choice in question.choices.all %}
+                    <label style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                        background:#f8fbff;
+                        padding:14px 16px;
+                        border-radius:16px;
+                        border:1px solid #e5ecf6;
+                        cursor:pointer;
+                        transition:0.2s;
+                    ">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}">
+                        <span style="color:#243b6b; font-weight:600;">{{ choice.text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="panel-card" style="text-align:center;">
+                <div style="font-size:36px; margin-bottom:8px;">📭</div>
+                <h3>Bu topshiriqda hali savollar yo‘q</h3>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if questions %}
+        <div style="margin-top:22px; display:flex; gap:12px; flex-wrap:wrap;">
+            <button type="submit" class="btn">Topshirish</button>
+            <a href="{% url 'student_assignments' %}" class="btn btn-secondary">Orqaga</a>
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block dashboard_role %}Teacher panel{% endblock %}
+{% block dashboard_title %}Salom, ustoz! 👩‍🏫{% endblock %}
+{% block dashboard_subtitle %}
+Bu yerda fanlar, topshiriqlar va natijalarni boshqarasiz.
+{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'teacher_dashboard' %}" class="active">🏠 Bosh sahifa</a>
+<a href="{% url 'create_subject' %}">📚 Fan yaratish</a>
+<a href="{% url 'create_assignment' %}">📝 Topshiriq yaratish</a>
+<a href="{% url 'teacher_assignments' %}">📋 Topshiriqlar</a>
+<a href="{% url 'teacher_students' %}">👦 O‘quvchilar</a>
+<a href="{% url 'about' %}">ℹ️ Sayt haqida</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <h3>Fanlar</h3>
+        <strong>{{ subjects_count|default:"0" }}</strong>
+        <p>Yaratilgan fanlar</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <h3>Topshiriqlar</h3>
+        <strong>{{ assignments_count|default:"0" }}</strong>
+        <p>Faol topshiriqlar</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">❓</div>
+        <h3>Savollar</h3>
+        <strong>{{ questions_count|default:"0" }}</strong>
+        <p>Kiritilgan savollar</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <h3>Natijalar</h3>
+        <strong>{{ submissions_count|default:"0" }}</strong>
+        <p>Bajarilgan ishlar</p>
+    </div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel-card">
+        <h2>So‘nggi topshiriqlar</h2>
+        <p>Yaqinda yaratilgan topshiriqlar ro‘yxati.</p>
+
+        <div class="list-group">
+            {% for assignment in recent_assignments %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📝</div>
+                    <div>
+                        <h4>{{ assignment.title }}</h4>
+                        <small>
+                            {{ assignment.created_at|date:"d M Y" }}
+                            {% if assignment.subject %}
+                                • {{ assignment.subject.title }}
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+                <a href="{% url 'assignment_submissions' assignment.id %}" class="btn">Natijalar</a>
+            </div>
+            {% empty %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📭</div>
+                    <div>
+                        <h4>Hozircha topshiriqlar yo‘q</h4>
+                        <small>Yangi topshiriqlar keyinroq shu yerda chiqadi</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="progress-card">
+        <h2>So‘nggi natijalar</h2>
+        <p>O‘quvchilarning oxirgi topshirgan ishlari.</p>
+
+        <div class="list-group" style="margin-top: 20px;">
+            {% for submission in recent_submissions %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">👦</div>
+                    <div>
+                        <h4>{{ submission.student.user.get_full_name|default:submission.student.user.username }}</h4>
+                        <small>{{ submission.assignment.title }} • {{ submission.score }} ball</small>
+                    </div>
+                </div>
+                <a href="{% url 'submission_detail' submission.id %}" class="btn">Ko‘rish</a>
+            </div>
+            {% empty %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📭</div>
+                    <div>
+                        <h4>Hozircha natijalar yo‘q</h4>
+                        <small>O‘quvchilar topshiriq bajarganda shu yerda chiqadi</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

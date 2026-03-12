@@ -1,0 +1,203 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block dashboard_role %}Student panel{% endblock %}
+{% block dashboard_title %}Salom, o‘quvchi! 👋{% endblock %}
+{% block dashboard_subtitle %}
+Bu yerda topshiriqlaringizni ko‘rasiz, ball va yulduzlaringizni kuzatasiz.
+{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'student_dashboard' %}" class="active">🏠 Bosh sahifa</a>
+<a href="{% url 'student_assignments' %}">📝 Topshiriqlar</a>
+<a href="{% url 'student_stars' %}">⭐ Yulduzlar</a>
+<a href="{% url 'collection' %}">🎁 Mukofotlar</a>
+<a href="{% url 'student_results' %}">📊 Natijalar</a>
+
+<a href="{% url 'about' %}">ℹ️ Sayt haqida</a>
+
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <h3>Umumiy ball</h3>
+        <strong>{{ total_points|default:"0" }}</strong>
+        <p>Yig‘ilgan ochkolar</p>
+    </div>
+
+    <div class="stat-card" style="box-shadow:0 0 18px rgba(255,215,0,.25)">
+        <div class="stat-icon">⭐</div>
+        <h3>Yulduzlar</h3>
+        <strong>{{ total_stars|default:"0" }}</strong>
+        <p>Faollik mukofotlari</p>
+    </div>
+
+    <div class="stat-card" style="background:linear-gradient(135deg,#fff7ed,#fef3c7)">
+        <div class="stat-icon">📝</div>
+        <h3>Topshiriqlar</h3>
+        <strong>{{ assignments_count|default:"0" }}</strong>
+        <p>Berilgan topshiriqlar</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">🎁</div>
+        <h3>Mukofotlar</h3>
+        <strong>{{ rewards_count|default:"0" }}</strong>
+        <p>Ochilgan kolleksiyalar</p>
+    </div>
+</div>
+
+<div class="panel-card" style="
+margin-top:20px;
+background: linear-gradient(135deg,#eef2ff,#f5f3ff);
+text-align:center;
+">
+
+    <div style="font-size:60px;">
+        {{ level_icon }}
+    </div>
+
+    <h2 style="
+    margin:10px 0 5px;
+    font-weight:900;
+    color:#4f46e5;
+    ">
+        Darajangiz: {{ level_name }}
+    </h2>
+
+    <p style="color:#6b7280; font-weight:700;">
+        Yulduz yig‘ishda davom eting va keyingi darajaga chiqing!
+    </p>
+
+</div>
+
+<div class="panel-grid">
+    <div class="panel-card">
+        <h2>So‘nggi topshiriqlar</h2>
+        <p>Yangi topshiriqlarni bajaring, bajarilganlari alohida belgilanadi.</p>
+
+        <div class="list-group">
+            {% for assignment in assignments %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📘</div>
+                    <div>
+                        <h4>{{ assignment.title }}</h4>
+                        <small>
+                            {{ assignment.created_at|date:"d M Y" }} • {{ assignment.questions.count }} ta savol
+                        </small>
+                    </div>
+                </div>
+
+                {% if assignment.is_done %}
+                    <span style="background:#dcfce7; color:#166534; padding:10px 14px; border-radius:999px; font-weight:800;">
+                        ✅ Bajarilgan
+                    </span>
+                {% else %}
+                    <a href="{% url 'assignment_detail' assignment.id %}" class="badge-soft">Boshlash</a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📭</div>
+                    <div>
+                        <h4>Hozircha topshiriq yo‘q</h4>
+                        <small>Yangi vazifalar keyinroq chiqadi</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="progress-card">
+        <h2>So‘nggi natijalar</h2>
+        <p>Bu yerda sizning oxirgi natijalaringiz va rivojlanishingiz ko‘rinadi.</p>
+
+        <div class="progress-line">
+            <div class="progress-fill" style="
+            width: {{ progress_percent }}%;
+            background: linear-gradient(90deg,#34d399,#60a5fa);
+            "></div>
+        </div>
+
+        <div class="progress-meta">
+            <span>{{ progress_percent|default:"0" }}% bajarildi</span>
+            <span>Maqsad: 100%</span>
+        </div>
+
+        <div class="list-group" style="margin-top: 20px;">
+            {% for submission in recent_submissions %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📝</div>
+                    <div>
+                        <h4>{{ submission.assignment.title }}</h4>
+                        <small>
+                            {{ submission.completed_at|date:"d M Y" }} • {{ submission.score }} ball
+                        </small>
+                    </div>
+                </div>
+                <a href="{% url 'student_result' submission.id %}" class="badge-soft">Ko‘rish</a>
+            </div>
+            {% empty %}
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-item-icon">📄</div>
+                    <div>
+                        <h4>Hali natijalar yo‘q</h4>
+                        <small>Birinchi topshiriqdan keyin shu yerda ko‘rinadi</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="panel-card" style="margin-top: 24px;">
+    <h2>Fanlar bo‘yicha progress</h2>
+
+    {% if subject_progress_list %}
+        <div class="list-group">
+            {% for item in subject_progress_list %}
+                <div class="list-item" style="display:block;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap;">
+                        <div>
+                            <h4 style="margin:0;">{{ item.subject.title }}</h4>
+                            <small>
+                                {{ item.completed_assignments }} / {{ item.total_assignments }} topshiriq bajarilgan
+                            </small>
+                        </div>
+
+                        <div class="badge-soft">
+                            {{ item.progress_percent }}%
+                        </div>
+                    </div>
+
+                    <div style="width:100%; height:12px; background:#e9eefc; border-radius:999px; overflow:hidden;">
+                        <div style="
+                            width: {{ item.progress_percent }}%;
+                            height:100%;
+                            background: linear-gradient(90deg, #7aa2ff, #6ee7b7);
+                            border-radius:999px;
+                        "></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="list-item">
+            <div class="list-item-left">
+                <div class="list-item-icon">📘</div>
+                <div>
+                    <h4>Hali progress yo‘q</h4>
+                    <small>Topshiriqlar bajarilgani sari fanlar bo‘yicha progress shu yerda chiqadi.</small>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

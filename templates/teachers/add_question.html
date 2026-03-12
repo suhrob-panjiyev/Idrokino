@@ -1,0 +1,355 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Savol qo‘shish{% endblock %}
+
+{% block content %}
+<style>
+    .pretty-shell{
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .pretty-page-title{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+    }
+
+    .pretty-page-title .icon{
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+    }
+
+    .pretty-page-title h1{
+        margin: 0;
+        font-size: 42px;
+        color: #243b6b;
+        font-weight: 800;
+    }
+
+    .pretty-page-title p{
+        margin: 6px 0 0 0;
+        color: #6b7280;
+        font-size: 17px;
+    }
+
+    .top-info-card{
+        background: linear-gradient(135deg, #eef4ff, #f8fbff);
+        border: 1px solid #dbe7ff;
+        border-radius: 22px;
+        padding: 20px 22px;
+        margin-bottom: 22px;
+    }
+
+    .top-info-card strong{
+        color: #1e3a8a;
+        font-size: 17px;
+    }
+
+    .pretty-card{
+        background: rgba(255,255,255,0.92);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .section-title{
+        margin: 0 0 18px 0;
+        font-size: 24px;
+        font-weight: 800;
+        color: #243b6b;
+    }
+
+    .form-grid{
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 18px;
+    }
+
+    .form-group{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group.full{
+        grid-column: 1 / -1;
+    }
+
+    .form-label{
+        font-size: 16px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .form-input{
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1.5px solid #dbe4f3;
+        background: #f9fbff;
+        font-size: 16px;
+        outline: none;
+        transition: .2s ease;
+    }
+
+    .form-input:focus{
+        border-color: #7aa2ff;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.15);
+    }
+
+    .help-text{
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 2px;
+    }
+
+    .error-text{
+        color: #b91c1c;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .tip-box{
+        background: linear-gradient(135deg, #fff7ed, #fffbeb);
+        border: 1px solid #fde68a;
+        border-radius: 18px;
+        padding: 18px;
+        color: #92400e;
+        margin-top: 18px;
+    }
+
+    .actions{
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+    }
+
+    .btn-soft{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 28px;
+        border-radius: 18px;
+        text-decoration: none;
+        font-weight: 800;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: .2s ease;
+    }
+
+    .btn-primary-soft{
+        background: linear-gradient(135deg, #5b8def, #7aa2ff);
+        color: white;
+        box-shadow: 0 12px 24px rgba(91, 141, 239, 0.25);
+    }
+
+    .btn-primary-soft:hover{
+        transform: translateY(-1px);
+    }
+
+    .btn-light-soft{
+        background: #f8fafc;
+        color: #4373d9;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-danger-soft{
+        background: linear-gradient(135deg, #ef4444, #f87171);
+        color: white;
+        box-shadow: 0 10px 20px rgba(239, 68, 68, 0.20);
+        padding: 10px 18px;
+        font-size: 14px;
+        border-radius: 14px;
+    }
+
+    .btn-danger-soft:hover{
+        transform: translateY(-1px);
+    }
+
+    .questions-card{
+        margin-top: 24px;
+        background: rgba(255,255,255,0.92);
+        border-radius: 28px;
+        padding: 26px;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .questions-list{
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 16px;
+    }
+
+    .question-item{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: #f8fbff;
+        border: 1px solid #edf2ff;
+        flex-wrap: wrap;
+    }
+
+    .question-badge{
+        background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        color: #24428a;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .question-actions{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .empty-box{
+        text-align: center;
+        padding: 28px 16px;
+        color: #6b7280;
+    }
+
+    .empty-box .emoji{
+        font-size: 46px;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px){
+        .form-grid{
+            grid-template-columns: 1fr;
+        }
+
+        .pretty-page-title h1{
+            font-size: 34px;
+        }
+
+        .pretty-card,
+        .questions-card{
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="pretty-shell">
+    <div class="pretty-page-title">
+        <div class="icon">❓</div>
+        <div>
+            <h1>Savol qo‘shish</h1>
+            <p>Topshiriq uchun savollar kiriting va keyin variantlarni qo‘shing.</p>
+        </div>
+    </div>
+
+    <div class="top-info-card">
+        <strong>Topshiriq:</strong> {{ assignment.title }}
+    </div>
+
+    <div class="pretty-card">
+        <h2 class="section-title">Yangi savol</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="error-text" style="margin-bottom:16px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.text.id_for_label }}">Savol matni</label>
+                    {{ form.text }}
+                    {% if form.text.errors %}
+                        <div class="error-text">{{ form.text.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Masalan: 2 + 3 nechiga teng?</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.order.id_for_label }}">Tartib raqami</label>
+                    {{ form.order }}
+                    {% if form.order.errors %}
+                        <div class="error-text">{{ form.order.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Savol nechinchi bo‘lib chiqishini belgilang</div>
+                </div>
+
+                <div class="form-group full">
+                    <label class="form-label" for="{{ form.image.id_for_label }}">Savol rasmi</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <div class="error-text">{{ form.image.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Ixtiyoriy. Rasmli savollar uchun foydali.</div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                💡 Tavsiya: savollarni bolalar tushunadigan sodda va qisqa tilda yozing.
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-soft btn-primary-soft">Saqlash va variant qo‘shish</button>
+                <a href="{% url 'teacher_assignments' %}" class="btn-soft btn-light-soft">Topshiriqlarga qaytish</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="questions-card">
+        <h2 class="section-title">Oldingi savollar</h2>
+
+        {% if questions %}
+            <div class="questions-list">
+                {% for question in questions %}
+                    <div class="question-item">
+                        <div>
+                            <div style="font-weight:800; color:#1f2937; font-size:17px; margin-bottom:6px;">
+                                {{ question.text }}
+                            </div>
+                            <div style="color:#6b7280; font-size:14px;">
+                                ID: {{ question.id }}
+                            </div>
+                        </div>
+
+                        <div class="question-actions">
+                            <div class="question-badge">
+                                {{ question.order }}-savol
+                            </div>
+
+                            <a href="{% url 'question_delete' question.id %}" class="btn-soft btn-danger-soft">
+                                O‘chirish
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-box">
+                <div class="emoji">📝</div>
+                <div>Hozircha savollar yo‘q. Birinchi savolni kiriting.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

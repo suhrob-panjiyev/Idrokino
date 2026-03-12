@@ -1,0 +1,578 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Ota-ona paneli{% endblock %}
+
+{% block content %}
+<style>
+    .dashboard-shell{
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 20px 24px 40px;
+    }
+
+    .dashboard-layout{
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .left-column,
+    .right-column{
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .hero-card,
+    .panel-card,
+    .stat-card{
+        background: rgba(255,255,255,0.88);
+        border-radius: 28px;
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .hero-card{
+        padding: 26px;
+    }
+
+    .hero-card h1{
+        margin: 0 0 12px 0;
+        font-size: 32px;
+        line-height: 1.2;
+        color: #24428a;
+        font-weight: 800;
+    }
+
+    .hero-card p{
+        margin: 0;
+        color: #5f6b7a;
+        font-size: 16px;
+        line-height: 1.5;
+        font-weight: 600;
+    }
+
+    .child-badge{
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #dbeafe, #eef4ff);
+        color: #2450b5;
+        padding: 14px 18px;
+        border-radius: 18px;
+        font-weight: 800;
+        margin-top: 22px;
+        flex-wrap: wrap;
+    }
+
+    .stats-grid{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .stat-card{
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before{
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #7aa2ff, #f1b4b4, #f2d45c);
+    }
+
+    .stat-icon{
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #edf5ff, #eef2ff);
+    }
+
+    .stat-card h3{
+        margin: 0 0 8px 0;
+        color: #25324b;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .stat-card strong{
+        display: block;
+        font-size: 38px;
+        color: #172033;
+        margin-bottom: 8px;
+        line-height: 1;
+    }
+
+    .stat-card p{
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .panel-card{
+        padding: 24px;
+    }
+
+    .panel-card h2{
+        margin: 0 0 18px 0;
+        font-size: 22px;
+        color: #24428a;
+        font-weight: 800;
+    }
+
+    .chart-wrap{
+        background: linear-gradient(135deg, #f8fbff, #fdfdff);
+        border: 1px solid #edf2ff;
+        border-radius: 22px;
+        padding: 18px;
+    }
+
+    .list-group{
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .list-item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 20px;
+        background: #f8fbff;
+        border: 1px solid #edf2ff;
+        flex-wrap: wrap;
+    }
+
+    .list-item-left{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .list-item-icon{
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #ede9fe, #dbeafe);
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .list-item h4{
+        margin: 0 0 6px 0;
+        font-size: 18px;
+        color: #1f2937;
+        font-weight: 800;
+    }
+
+    .list-item small{
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .score-badge{
+        background: #dcfce7;
+        color: #166534;
+        padding: 9px 14px;
+        border-radius: 999px;
+        font-weight: 800;
+    }
+
+    .empty-box{
+        text-align: center;
+        padding: 32px 20px;
+    }
+
+    .empty-box .emoji{
+        font-size: 54px;
+        margin-bottom: 12px;
+    }
+
+    .empty-box h3{
+        margin: 0 0 8px 0;
+        color: #1f2937;
+        font-size: 24px;
+    }
+
+    .empty-box p{
+        margin: 0;
+        color: #6b7280;
+    }
+
+    @media (max-width: 1000px){
+        .dashboard-layout{
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid{
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px){
+        .stats-grid{
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .chart-stats-row{
+        display:grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap:14px;
+        margin-bottom:18px;
+    }
+
+    .mini-stat{
+        background: linear-gradient(135deg, #f8fbff, #eef4ff);
+        border: 1px solid #e5edff;
+        border-radius: 18px;
+        padding: 14px 16px;
+    }
+
+    .mini-stat-label{
+        display:block;
+        font-size:13px;
+        color:#6b7280;
+        margin-bottom:6px;
+        font-weight:700;
+    }
+
+    .mini-stat strong{
+        font-size:28px;
+        color:#24428a;
+        line-height:1;
+    }
+
+    .modern-chart-wrap{
+        padding: 20px 18px 10px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #f9fbff, #ffffff);
+    }
+
+    @media (max-width: 700px){
+        .chart-stats-row{
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="dashboard-shell">
+    <div class="dashboard-layout">
+
+        <div class="left-column">
+            <div class="hero-card">
+                <h1>Ota-ona paneli</h1>
+                <p>Farzandingizning o‘qishi, ballari va so‘nggi natijalarini shu yerda kuzatishingiz mumkin.</p>
+
+                {% if child %}
+                    <div class="child-badge">
+                        👦 {{ child.user.get_full_name|default:child.user.username }}
+                        {% if child.class_group %}
+                            • {{ child.class_group.name }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="panel-card">
+                <h2>So‘nggi natijalar</h2>
+
+                {% if child %}
+                    <div class="list-group">
+                        {% for submission in recent_submissions %}
+                            <div class="list-item">
+                                <div class="list-item-left">
+                                    <div class="list-item-icon">📘</div>
+                                    <div>
+                                        <h4>{{ submission.assignment.title }}</h4>
+                                        <small>{{ submission.completed_at|date:"d.m.Y H:i" }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="score-badge">
+                                    {{ submission.score }} ball
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="empty-box">
+                                <div class="emoji">📭</div>
+                                <h3>Hali natijalar yo‘q</h3>
+                                <p>Farzandingiz hali topshiriq bajarmagan yoki natijalar chiqmagan.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-box">
+                        <div class="emoji">👨‍👩‍👧</div>
+                        <h3>Farzand hali biriktirilmagan</h3>
+                        <p>Bu ota-ona akkauntiga hozircha hech qaysi o‘quvchi bog‘lanmagan.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="right-column">
+            {% if child %}
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <h3>Ballar</h3>
+                        <strong>{{ child_points }}</strong>
+                        <p>Umumiy yig‘ilgan ball</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <h3>Yulduzlar</h3>
+                        <strong>{{ child_stars }}</strong>
+                        <p>Faollik uchun olingan yulduzlar</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <h3>Topshiriqlar</h3>
+                        <strong>{{ child_assignments }}</strong>
+                        <p>Bajarilgan topshiriqlar soni</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🎁</div>
+                        <h3>Mukofotlar</h3>
+                        <strong>{{ child_rewards_count }}</strong>
+                        <p>Ochilgan sovg‘alar soni</p>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2>Farzand statistikasi</h2>
+                    <p style="color:#6b7280; margin-top:-6px; margin-bottom:16px;">
+                        Oxirgi topshiriqlardagi ballar ko‘rsatkichi
+                    </p>
+
+                    <div style="margin-bottom:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:12px; flex-wrap:wrap;">
+                            <strong style="color:#24428a; font-size:16px;">Umumiy progress</strong>
+                            <span style="color:#6b7280; font-weight:800;">{{ progress_percent }}%</span>
+                        </div>
+
+                        <div style="width:100%; height:14px; background:#e9eefc; border-radius:999px; overflow:hidden;">
+                            <div style="
+                                width: {{ progress_percent }}%;
+                                height:100%;
+                                background: linear-gradient(90deg, #7aa2ff, #6ee7b7);
+                                border-radius:999px;
+                            "></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-stats-row">
+                        <div class="mini-stat">
+                            <span class="mini-stat-label">Eng yuqori ball</span>
+                            <strong id="bestScoreValue">0</strong>
+                        </div>
+                        <div class="mini-stat">
+                            <span class="mini-stat-label">O‘rtacha ball</span>
+                            <strong id="avgScoreValue">0</strong>
+                        </div>
+                        <div class="mini-stat">
+                            <span class="mini-stat-label">Topshiriqlar</span>
+                            <strong id="taskCountValue">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="chart-wrap modern-chart-wrap">
+                        <canvas id="progressChart" height="140"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2>So‘nggi mukofotlar</h2>
+
+                    {% if recent_rewards %}
+                        <div class="list-group">
+                            {% for item in recent_rewards %}
+                                <div class="list-item">
+                                    <div class="list-item-left">
+                                        <div class="list-item-icon">
+                                            {{ item.reward.icon|default:"🎁" }}
+                                        </div>
+                                        <div>
+                                            <h4>{{ item.reward.title }}</h4>
+                                            <small>{{ item.unlocked_at|date:"d.m.Y H:i" }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="score-badge">
+                                        {{ item.reward.needed_stars }} ⭐
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-box">
+                            <div class="emoji">🎁</div>
+                            <h3>Hali mukofot yo‘q</h3>
+                            <p>Farzandingiz yulduz yig‘gan sari mukofotlar shu yerda ko‘rinadi.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_scores|json_script:"chart-scores" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labelsElement = document.getElementById("chart-labels");
+    const scoresElement = document.getElementById("chart-scores");
+
+    if (labelsElement && scoresElement) {
+        const labels = JSON.parse(labelsElement.textContent);
+        const scores = JSON.parse(scoresElement.textContent);
+
+        const bestScoreEl = document.getElementById("bestScoreValue");
+        const avgScoreEl = document.getElementById("avgScoreValue");
+        const taskCountEl = document.getElementById("taskCountValue");
+
+        if (bestScoreEl) {
+            bestScoreEl.textContent = scores.length ? Math.max(...scores) : 0;
+        }
+
+        if (avgScoreEl) {
+            const avg = scores.length
+                ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1)
+                : 0;
+            avgScoreEl.textContent = avg;
+        }
+
+        if (taskCountEl) {
+            taskCountEl.textContent = scores.length;
+        }
+
+        const canvas = document.getElementById("progressChart");
+
+        if (canvas && labels.length > 0) {
+            const ctx = canvas.getContext("2d");
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+            gradient.addColorStop(0, "rgba(91, 141, 239, 0.95)");
+            gradient.addColorStop(1, "rgba(122, 162, 255, 0.55)");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Ballar",
+                        data: scores,
+                        backgroundColor: gradient,
+                        borderRadius: 16,
+                        borderSkipped: false,
+                        maxBarThickness: 42
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 10,
+                            right: 8,
+                            left: 8,
+                            bottom: 0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: "#1f2937",
+                            titleColor: "#ffffff",
+                            bodyColor: "#ffffff",
+                            cornerRadius: 12,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return "Ball: " + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#4b5563",
+                                font: {
+                                    size: 12,
+                                    weight: "600"
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grace: "10%",
+                            grid: {
+                                color: "rgba(148, 163, 184, 0.15)"
+                            },
+                            ticks: {
+                                stepSize: 5,
+                                color: "#64748b",
+                                font: {
+                                    size: 12,
+                                    weight: "600"
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: "valueLabels",
+                    afterDatasetsDraw(chart) {
+                        const { ctx } = chart;
+                        ctx.save();
+                        ctx.font = "700 12px sans-serif";
+                        ctx.fillStyle = "#24428a";
+                        ctx.textAlign = "center";
+
+                        chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                            const value = scores[index];
+                            ctx.fillText(value, bar.x, bar.y - 8);
+                        });
+
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+    }
+</script>
+{% endblock %}

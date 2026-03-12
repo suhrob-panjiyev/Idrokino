@@ -1,0 +1,37 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block dashboard_role %}Student panel{% endblock %}
+{% block dashboard_title %}Mukofotlar{% endblock %}
+{% block dashboard_subtitle %}
+Bu yerda ochilgan va hali ochilmagan mukofotlaringiz turadi.
+{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'student_dashboard' %}">🏠 Bosh sahifa</a>
+<a href="{% url 'student_assignments' %}">📝 Topshiriqlar</a>
+<a href="{% url 'student_stars' %}">⭐ Yulduzlar</a>
+<a href="{% url 'collection' %}" class="active">🎁 Mukofotlar</a>
+<a href="{% url 'student_results' %}">📊 Natijalar</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="panel-card" style="margin-bottom:20px;">
+    <h2>🌟 Jami yulduzlar</h2>
+    <p style="font-size:32px; font-weight:800; margin-top:10px;">⭐ {{ student_profile.stars }}</p>
+</div>
+
+<div class="stats-grid">
+    {% for reward in rewards %}
+    <div class="stat-card" style="{% if not reward.unlocked %}opacity:0.55;{% endif %}">
+        <div class="stat-icon" style="font-size:28px;">{{ reward.icon }}</div>
+        <h3>{{ reward.title }}</h3>
+        <strong style="font-size:22px;">{{ reward.needed }}⭐</strong>
+        {% if reward.unlocked %}
+            <p style="color:#166534; font-weight:700;">Ochilgan ✅</p>
+        {% else %}
+            <p>Hali ochilmagan 🔒</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

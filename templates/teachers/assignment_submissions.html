@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Topshiriq natijalari{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto;">
+    <div style="margin-bottom:24px;">
+        <h1 style="margin:0 0 8px 0;">📊 Topshiriq natijalari</h1>
+        <p style="margin:0; color:#6b7280;">
+            <strong>{{ assignment.title }}</strong> • {{ assignment.subject.title }}
+        </p>
+    </div>
+
+    <div style="margin-bottom:18px;">
+        <a href="{% url 'teacher_assignments' %}" class="btn btn-secondary">← Topshiriqlarga qaytish</a>
+    </div>
+
+    <div style="display:grid; gap:16px;">
+        {% for submission in submissions %}
+        <div style="background:white; border-radius:20px; padding:22px; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+                <div>
+                    <h3 style="margin:0 0 8px 0;">
+                        {{ submission.student.user.get_full_name|default:submission.student.user.username }}
+                    </h3>
+                    <p style="margin:0; color:#6b7280;">
+                        {{ submission.completed_at|date:"d.m.Y H:i" }} • {{ submission.score }} ball
+                    </p>
+                </div>
+
+                <a href="{% url 'submission_detail' submission.id %}" class="btn">Batafsil ko‘rish</a>
+            </div>
+        </div>
+        {% empty %}
+        <div style="background:white; border-radius:20px; padding:28px; box-shadow:0 6px 20px rgba(0,0,0,0.06); text-align:center;">
+            <h3>Hozircha natijalar yo‘q</h3>
+            <p style="color:#6b7280;">O‘quvchilar bu topshiriqni bajargach, natijalar shu yerda chiqadi.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

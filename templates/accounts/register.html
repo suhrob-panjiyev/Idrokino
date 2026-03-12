@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Ro‘yxatdan o‘tish | Idrokino{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-left">
+                <span class="section-chip">✨ Yangi boshlanish</span>
+                <h1 class="auth-title">Ro‘yxatdan o‘ting</h1>
+                <p class="auth-subtitle">
+                    Idrokino platformasiga qo‘shiling va o‘rganishni yanada qiziqarli qiling.
+                </p>
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-alert">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="id_username">Login</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <small class="form-error">{{ form.username.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_email">Email</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <small class="form-error">{{ form.email.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="id_password1">Parol</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <small class="form-error">{{ form.password1.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_password2">Parolni tasdiqlang</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <small class="form-error">{{ form.password2.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.role %}
+                    <div class="form-group">
+                        <label for="id_role">Rol</label>
+                        {{ form.role }}
+                        {% if form.role.errors %}
+                            <small class="form-error">{{ form.role.errors|striptags }}</small>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary auth-btn">Ro‘yxatdan o‘tish</button>
+                </form>
+
+                <p class="auth-bottom-text">
+                    Akkauntingiz bormi?
+                    <a href="{% url 'login' %}">Kirish</a>
+                </p>
+            </div>
+
+            <div class="auth-right">
+                <div class="auth-visual">
+                    <div class="auth-bubble bubble-one"></div>
+                    <div class="auth-bubble bubble-two"></div>
+                    <div class="auth-badge badge-yellow">🏆 Ballar</div>
+                    <div class="auth-badge badge-pink">⭐ Yulduzlar</div>
+                    <div class="auth-badge badge-green">🎁 Reward</div>
+
+                    <div class="auth-emoji-circle">
+                        <div class="auth-emoji">🚀</div>
+                    </div>
+
+                    <h3>Bugunoq boshlang</h3>
+                    <p>O‘yin va bilimni birlashtirgan platformaga qo‘shiling.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

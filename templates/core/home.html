@@ -1,0 +1,252 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Idrokino | Bosh sahifa{% endblock %}
+
+{% block content %}
+<section class="hero section">
+    <div class="container hero-grid">
+        
+        <!-- Left content -->
+        <div class="hero-content">
+            <span class="hero-badge">🌟 Qiziqarli ta’lim platformasi</span>
+
+            <h1 class="hero-title">
+                Bilim olish endi
+                <span>yanada qiziqarli!</span>
+            </h1>
+
+            <p class="hero-text">
+                Idrokino orqali bolalar topshiriqlarni bajaradi, ball va yulduzlar yig‘adi,
+                sovg‘alar ochadi va o‘rganishni sevib qoladi.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{% url 'register' %}" class="btn btn-primary">Boshlash</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Kirish</a>
+            </div>
+
+            <div class="hero-mini-cards">
+                <div class="mini-card">
+                    <div class="mini-icon">🏆</div>
+                    <div>
+                        <h4>Ballar</h4>
+                        <p>Topshiriq bajaring va ochko yig‘ing</p>
+                    </div>
+                </div>
+
+                <div class="mini-card">
+                    <div class="mini-icon">⭐</div>
+                    <div>
+                        <h4>Yulduzlar</h4>
+                        <p>Faollik uchun maxsus mukofotlar oling</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right visual -->
+        <div class="hero-visual">
+            <div class="visual-card">
+                <div class="planet planet-1"></div>
+                <div class="planet planet-2"></div>
+                <div class="floating-star star-1">⭐</div>
+                <div class="floating-star star-2">✨</div>
+                <div class="floating-star star-3">🌈</div>
+
+                <div class="character-card card-yellow">
+                    <span class="emoji">📚</span>
+                    <p>O‘rganamiz</p>
+                </div>
+
+                <div class="character-card card-pink">
+                    <span class="emoji">🎮</span>
+                    <p>O‘ynaymiz</p>
+                </div>
+
+                <div class="character-card card-green">
+                    <span class="emoji">🚀</span>
+                    <p>O‘samiz</p>
+                </div>
+
+                <div class="main-illustration">
+                    <div class="circle-bg"></div>
+                    <div class="student-face">🧒</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section quick-info">
+    <div class="container quick-info-grid">
+        <div class="info-box info-student">
+            <div class="info-badge">O‘quvchi</div>
+            <span>👩‍🎓</span>
+            <h3>Student</h3>
+            <p>Topshiriqlar bajaradi, natija oladi va reward yig‘adi.</p>
+            <a href="{% url 'register' %}" class="info-link">Boshlash →</a>
+        </div>
+
+        <div class="info-box info-teacher">
+            <div class="info-badge">Ustoz</div>
+            <span>👩‍🏫</span>
+            <h3>Teacher</h3>
+            <p>Fan, savol va topshiriqlarni qulay boshqaradi.</p>
+            <a href="{% url 'login' %}" class="info-link">Kirish →</a>
+        </div>
+
+        <div class="info-box info-parent">
+            <div class="info-badge">Ota-ona</div>
+            <span>👨‍👩‍👧</span>
+            <h3>Parent</h3>
+            <p>Farzandining o‘zlashtirishini va yutuqlarini kuzatadi.</p>
+            <a href="{% url 'login' %}" class="info-link">Kirish →</a>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="section features-section">
+    <div class="container">
+        <div class="section-heading center">
+            <span class="section-chip">🎯 Afzalliklar</span>
+            <h2 class="section-title">Nega aynan Idrokino?</h2>
+            <p class="section-subtitle">
+                Platforma bolalar, o‘qituvchilar va ota-onalar uchun bir vaqtning o‘zida qulay,
+                sodda va qiziqarli bo‘lishi uchun yaratilgan.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon">🎮</div>
+                <h3>O‘yin orqali o‘rganish</h3>
+                <p>
+                    Topshiriqlar oddiy dars emas, qiziqarli jarayon sifatida ko‘rinadi.
+                </p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-icon">⭐</div>
+                <h3>Ball va yulduzlar</h3>
+                <p>
+                    Har bir harakat uchun o‘quvchi motivatsiya oladi va faol bo‘lib boradi.
+                </p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-icon">🏅</div>
+                <h3>Mukofot va kolleksiya</h3>
+                <p>
+                    Yig‘ilgan natijalar orqali reward va kichik sovg‘alar ochiladi.
+                </p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-icon">👨‍👩‍👧</div>
+                <h3>Ota-ona nazorati</h3>
+                <p>
+                    Parent farzandining yutuqlari, yulduzlari va oxirgi natijalarini ko‘ra oladi.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="section how-section">
+    <div class="container">
+        <div class="section-heading center">
+            <span class="section-chip">🚀 Qanday ishlaydi</span>
+            <h2 class="section-title">3 oddiy qadam bilan</h2>
+            <p class="section-subtitle">
+                Idrokino’dan foydalanish juda oson va bolalar uchun tushunarli.
+            </p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Platformaga kiring</h3>
+                <p>
+                    Student, Teacher yoki Parent sifatida tizimga kirish mumkin.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Topshiriqni bajaring</h3>
+                <p>
+                    O‘quvchi savollarga javob beradi, o‘qituvchi esa jarayonni boshqaradi.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Natija va mukofot oling</h3>
+                <p>
+                    Ballar, yulduzlar va rewardlar orqali o‘rganish yanada qiziqarli bo‘ladi.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="rewards" class="section rewards-section">
+    <div class="container rewards-grid">
+        <div class="rewards-content">
+            <span class="section-chip">🌈 Gamification</span>
+            <h2 class="section-title">Har bir kichik yutuq — katta motivatsiya</h2>
+            <p class="section-subtitle">
+                Idrokino’da bola faqat test ishlamaydi. U ball yig‘adi, yulduz oladi,
+                sovg‘alar ochadi va o‘z rivojlanishini ko‘rib boradi.
+            </p>
+
+            <div class="reward-list">
+                <div class="reward-item">
+                    <span>⭐</span>
+                    <p>Faollik uchun yulduzlar</p>
+                </div>
+                <div class="reward-item">
+                    <span>🏆</span>
+                    <p>Natijalar uchun ballar</p>
+                </div>
+                <div class="reward-item">
+                    <span>🎁</span>
+                    <p>Kolleksiya va reward tizimi</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rewards-visual">
+            <div class="rewards-panel">
+                <div class="reward-bubble bubble-yellow">⭐ +10</div>
+                <div class="reward-bubble bubble-pink">🏆 250 ball</div>
+                <div class="reward-bubble bubble-green">🎁 Reward</div>
+
+                <div class="reward-center">
+                    <div class="reward-circle">🧠</div>
+                    <h3>Bilim + O‘yin</h3>
+                    <p>Qiziqarli va foydali tajriba</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <span class="section-chip chip-white">✨ Boshlash vaqti keldi</span>
+            <h2>Idrokino bilan bilim sayohatini bugunoq boshlang!</h2>
+            <p>
+                O‘quvchilar uchun qiziqarli, o‘qituvchilar uchun qulay, ota-onalar uchun ishonchli platforma.
+            </p>
+
+            <div class="cta-actions">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-light">Ro‘yxatdan o‘tish</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary btn-white-outline">Kirish</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

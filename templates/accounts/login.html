@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Kirish | Idrokino{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-left">
+                <span class="section-chip">🔐 Xush kelibsiz</span>
+                <h1 class="auth-title">Akkauntingizga kiring</h1>
+                <p class="auth-subtitle">
+                    Idrokino’da o‘rganish, boshqarish va kuzatish uchun tizimga kiring.
+                </p>
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="form-alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="username">Login</label>
+                        <input type="text" name="username" id="username" placeholder="Login kiriting" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Parol</label>
+                        <input type="password" name="password" id="password" placeholder="Parol kiriting" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary auth-btn">Kirish</button>
+                </form>
+
+                <p class="auth-bottom-text">
+                    Akkauntingiz yo‘qmi?
+                    <a href="{% url 'register' %}">Ro‘yxatdan o‘tish</a>
+                </p>
+            </div>
+
+            <div class="auth-right">
+                <div class="auth-visual">
+                    <div class="auth-bubble bubble-one"></div>
+                    <div class="auth-bubble bubble-two"></div>
+                    <div class="auth-badge badge-yellow">⭐ Faollik</div>
+                    <div class="auth-badge badge-pink">🎮 Qiziqish</div>
+                    <div class="auth-badge badge-green">📚 Bilim</div>
+
+                    <div class="auth-emoji-circle">
+                        <div class="auth-emoji">🧒</div>
+                    </div>
+
+                    <h3>Idrokino bilan davom eting</h3>
+                    <p>Ta’lim, motivatsiya va quvnoq rivojlanish bir joyda.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

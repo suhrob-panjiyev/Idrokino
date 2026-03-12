@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="container dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <div class="dashboard-brand">
+                <div class="dashboard-brand-icon">⭐</div>
+                <div>
+                    <h3>Idrokino</h3>
+                    <p>{% block dashboard_role %}Bosh sahifa{% endblock %}</p>
+                </div>
+            </div>
+
+            <nav class="dashboard-nav">
+                {% block sidebar_links %}{% endblock %}
+            </nav>
+        </aside>
+
+        <div class="dashboard-main">
+            <div class="dashboard-topbar">
+                <div>
+                    <span class="section-chip">📘 Idrokino paneli</span>
+                    <h1 class="dashboard-title">{% block dashboard_title %}Bosh sahifa{% endblock %}</h1>
+                    <p class="dashboard-subtitle">{% block dashboard_subtitle %}Sahifa tavsifi{% endblock %}</p>
+                </div>
+
+                <div class="dashboard-top-actions">
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Bosh sahifa</a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Chiqish</a>
+                </div>
+            </div>
+
+            {% block dashboard_content %}{% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}  

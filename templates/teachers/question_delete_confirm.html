@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Savolni o‘chirish{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin:0 auto; padding:20px 0 40px 0;">
+
+    <h1 style="font-size:40px; font-weight:800; color:#243b6b; margin-bottom:20px;">
+        🗑️ Savolni o‘chirish
+    </h1>
+
+    <div style="background:white; border-radius:24px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,0.06);">
+
+        <div style="margin-bottom:20px;">
+            <strong>Topshiriq:</strong> {{ assignment.title }} <br><br>
+            <strong>Savol:</strong> {{ question.text }}
+        </div>
+
+        {% if submissions_exist %}
+            <div style="
+                padding:16px;
+                border-radius:16px;
+                background:#fef2f2;
+                border:1px solid #fecaca;
+                color:#b91c1c;
+                margin-bottom:20px;
+            ">
+                Bu savol bo‘yicha student javoblari mavjud. Uni o‘chirish mumkin emas.
+            </div>
+
+            <a href="{% url 'add_question' assignment.id %}" class="btn">
+                Ortga qaytish
+            </a>
+
+        {% else %}
+
+            <p style="margin-bottom:20px;">
+                Siz rostdan ham bu savolni o‘chirmoqchimisiz?
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn" type="submit">Ha, o‘chirish</button>
+                <a href="{% url 'add_question' assignment.id %}" class="btn btn-secondary">
+                    Bekor qilish
+                </a>
+            </form>
+
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

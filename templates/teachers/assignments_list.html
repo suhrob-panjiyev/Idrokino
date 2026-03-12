@@ -1,0 +1,221 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Topshiriqlar{% endblock %}
+
+{% block content %}
+<div style="max-width:1100px; margin:0 auto; padding-bottom:40px;">
+
+    <!-- HEADER -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; margin-bottom:26px; flex-wrap:wrap;">
+        <div>
+            <h1 style="font-size:48px; margin:0; font-weight:800; color:#243b6b;">
+                📋 Mening topshiriqlarim
+            </h1>
+            <p style="margin-top:10px; color:#7b8190; font-size:16px;">
+                Bu yerda barcha topshiriqlarni boshqarishingiz mumkin
+            </p>
+        </div>
+
+        <a href="{% url 'create_assignment' %}"
+           style="
+           background:linear-gradient(135deg,#7aa2ff,#5c87f2);
+           color:white;
+           padding:14px 22px;
+           border-radius:16px;
+           text-decoration:none;
+           font-weight:700;
+           box-shadow:0 10px 20px rgba(92,135,242,0.22);
+           ">
+            + Yangi topshiriq
+        </a>
+    </div>
+
+    <!-- CARDS -->
+    <div style="display:grid; gap:18px;">
+        {% for assignment in assignments %}
+        <div style="
+            background:white;
+            border-radius:24px;
+            padding:22px;
+            border:1px solid #e8ecf5;
+            box-shadow:0 10px 28px rgba(0,0,0,0.05);
+            transition:0.25s;
+        "
+        onmouseover="this.style.transform='translateY(-3px)'"
+        onmouseout="this.style.transform='translateY(0)'"
+        >
+
+            <div style="display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap;">
+
+                <!-- LEFT -->
+                <div style="flex:1; min-width:260px;">
+                    <h2 style="margin:0 0 8px 0; font-size:22px; font-weight:800; color:#243b6b;">
+                        {{ assignment.title }}
+                    </h2>
+
+                    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+
+                        <span style="
+                            background:#eef2ff;
+                            color:#4f46e5;
+                            padding:6px 10px;
+                            border-radius:10px;
+                            font-size:13px;
+                            font-weight:600;">
+                            {{ assignment.subject.title }}
+                        </span>
+
+                        <span style="
+                            background:#ecfeff;
+                            color:#0891b2;
+                            padding:6px 10px;
+                            border-radius:10px;
+                            font-size:13px;
+                            font-weight:600;">
+                            {{ assignment.points }} ball
+                        </span>
+
+                        {% if assignment.is_active %}
+                        <span style="
+                            background:#dcfce7;
+                            color:#15803d;
+                            padding:6px 10px;
+                            border-radius:10px;
+                            font-size:13px;
+                            font-weight:700;">
+                            Faol
+                        </span>
+                        {% else %}
+                        <span style="
+                            background:#fff7ed;
+                            color:#d97706;
+                            padding:6px 10px;
+                            border-radius:10px;
+                            font-size:13px;
+                            font-weight:700;">
+                            Nofaol
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- STATS -->
+                    <div style="display:flex; gap:26px; flex-wrap:wrap; margin-top:10px;">
+
+                        <div>
+                            <div style="font-size:12px; color:#7b8190;">Savollar</div>
+                            <div style="font-size:20px; font-weight:800; color:#243b6b;">
+                                {{ assignment.questions.count }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-size:12px; color:#7b8190;">Natijalar</div>
+                            <div style="font-size:20px; font-weight:800; color:#243b6b;">
+                                {{ assignment.submissions.count }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-size:12px; color:#7b8190;">Yaratilgan</div>
+                            <div style="font-size:15px; font-weight:700; color:#243b6b;">
+                                {{ assignment.created_at|date:"d M Y" }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div style="display:flex; flex-direction:column; gap:10px;">
+
+                    <a href="{% url 'assignment_submissions' assignment.id %}"
+                       style="
+                       background:#243b6b;
+                       color:white;
+                       padding:10px 16px;
+                       border-radius:12px;
+                       text-decoration:none;
+                       font-weight:700;
+                       text-align:center;
+                       ">
+                        Natijalar
+                    </a>
+
+                    <a href="{% url 'add_question' assignment.id %}"
+                       style="
+                       background:#f1f5f9;
+                       padding:10px 16px;
+                       border-radius:12px;
+                       text-decoration:none;
+                       font-weight:700;
+                       color:#243b6b;
+                       text-align:center;
+                       ">
+                        Savol qo‘shish
+                    </a>
+
+                    <a href="{% url 'assignment_edit' assignment.id %}"
+                       style="
+                       background:#f1f5f9;
+                       padding:10px 16px;
+                       border-radius:12px;
+                       text-decoration:none;
+                       font-weight:700;
+                       color:#243b6b;
+                       text-align:center;
+                       ">
+                        Tahrirlash
+                    </a>
+
+                    <form method="post" action="{% url 'assignment_toggle_active' assignment.id %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                style="
+                                width:100%;
+                                border:none;
+                                background:#fef3c7;
+                                padding:10px;
+                                border-radius:12px;
+                                font-weight:700;
+                                cursor:pointer;
+                                ">
+                            {% if assignment.is_active %}
+                                Nofaol qilish
+                            {% else %}
+                                Faol qilish
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <a href="{% url 'assignment_delete' assignment.id %}"
+                       style="
+                       background:#fee2e2;
+                       color:#b91c1c;
+                       padding:10px;
+                       border-radius:12px;
+                       text-decoration:none;
+                       font-weight:700;
+                       text-align:center;
+                       ">
+                        O‘chirish
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div style="
+            background:white;
+            border-radius:24px;
+            padding:40px;
+            text-align:center;
+            border:1px solid #e8ecf5;
+        ">
+            <h2 style="margin:0;">Hozircha topshiriqlar yo‘q</h2>
+            <p style="color:#7b8190;">Yangi topshiriq yaratib boshlang</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

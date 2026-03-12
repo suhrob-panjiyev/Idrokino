@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Natija tafsiloti{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
+        <div>
+            <h1 style="margin:0 0 8px 0;">📘 O‘quvchi natijasi</h1>
+            <p style="margin:0; color:#6b7280;">
+                {{ submission.student.user.get_full_name|default:submission.student.user.username }}
+                • {{ submission.assignment.title }}
+            </p>
+        </div>
+        <a href="{% url 'assignment_submissions' submission.assignment.id %}" class="btn btn-secondary">← Ortga</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+        <div style="background:white; padding:20px; border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+            <h3 style="margin:0 0 8px 0;">Ball</h3>
+            <strong style="font-size:30px;">{{ submission.score }}</strong>
+        </div>
+
+        <div style="background:white; padding:20px; border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+            <h3 style="margin:0 0 8px 0;">To‘g‘ri javoblar</h3>
+            <strong style="font-size:30px;">{{ correct_answers }}/{{ total_questions }}</strong>
+        </div>
+
+        <div style="background:white; padding:20px; border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+            <h3 style="margin:0 0 8px 0;">Topshirilgan vaqt</h3>
+            <strong style="font-size:20px;">{{ submission.completed_at|date:"d.m.Y H:i" }}</strong>
+        </div>
+    </div>
+
+    <div style="display:grid; gap:16px;">
+        {% for answer in answers %}
+        <div style="background:white; border-radius:20px; padding:22px; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+                <div>
+                    <h3 style="margin:0 0 10px 0;">
+                        {{ forloop.counter }}. {{ answer.question.text }}
+                    </h3>
+                    <p style="margin:0; color:#6b7280;">
+                        Tanlangan javob:
+                        <strong>{{ answer.selected_choice.text }}</strong>
+                    </p>
+                </div>
+
+                {% if answer.is_correct %}
+                    <span style="background:#dcfce7; color:#166534; padding:8px 12px; border-radius:999px; font-weight:700;">
+                        To‘g‘ri
+                    </span>
+                {% else %}
+                    <span style="background:#fee2e2; color:#991b1b; padding:8px 12px; border-radius:999px; font-weight:700;">
+                        Noto‘g‘ri
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div style="background:white; border-radius:20px; padding:28px; box-shadow:0 6px 20px rgba(0,0,0,0.06); text-align:center;">
+            <h3>Javoblar topilmadi</h3>
+            <p style="color:#6b7280;">Bu submission uchun javoblar mavjud emas.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

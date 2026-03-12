@@ -1,0 +1,221 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Topshiriqni o‘chirish{% endblock %}
+
+{% block content %}
+<div style="max-width: 920px; margin: 0 auto; padding: 10px 0 40px 0;">
+
+    <!-- Header -->
+    <div style="display:flex; align-items:flex-start; gap:18px; margin-bottom:22px;">
+        <div style="
+            width:58px;
+            height:58px;
+            border-radius:18px;
+            background: linear-gradient(135deg, #fee2e2, #ffe4e6);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:24px;
+            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.12);
+        ">
+            🗑️
+        </div>
+
+        <div>
+            <h1 style="
+                margin:0;
+                font-size:44px;
+                line-height:1.1;
+                font-weight:800;
+                color:#243b6b;
+                letter-spacing:-0.5px;
+            ">
+                Topshiriqni o‘chirish
+            </h1>
+            <p style="
+                margin:12px 0 0 0;
+                color:#7b8190;
+                font-size:16px;
+            ">
+                Bu amal muhim. Iltimos, quyidagi ma’lumotlarni tekshirib chiqing.
+            </p>
+        </div>
+    </div>
+
+    <!-- Card -->
+    <div style="
+        background:#ffffff;
+        border:1px solid #e8ecf5;
+        border-radius:28px;
+        padding:28px 22px 22px 22px;
+        box-shadow: 0 10px 30px rgba(31, 41, 55, 0.06);
+    ">
+
+        <!-- info -->
+        <div style="
+            margin-bottom:22px;
+            padding:16px 18px;
+            border-radius:18px;
+            background:#f8faff;
+            border:1px solid #e6ebf5;
+        ">
+            <div style="display:flex; flex-wrap:wrap; gap:14px 28px; align-items:center;">
+                <div>
+                    <div style="font-size:13px; color:#7b8190; margin-bottom:4px;">Topshiriq</div>
+                    <div style="font-size:18px; font-weight:700; color:#243b6b;">{{ assignment.title }}</div>
+                </div>
+
+                <div>
+                    <div style="font-size:13px; color:#7b8190; margin-bottom:4px;">Fan</div>
+                    <div style="font-size:15px; font-weight:700; color:#243b6b;">{{ assignment.subject.title }}</div>
+                </div>
+
+                <div>
+                    <div style="font-size:13px; color:#7b8190; margin-bottom:4px;">Ball</div>
+                    <div style="font-size:15px; font-weight:700; color:#243b6b;">{{ assignment.points }}</div>
+                </div>
+
+                <div>
+                    <div style="font-size:13px; color:#7b8190; margin-bottom:4px;">Holati</div>
+                    <div style="font-size:15px; font-weight:700; color:{% if assignment.is_active %}#16a34a{% else %}#d97706{% endif %};">
+                        {% if assignment.is_active %}
+                            Faol
+                        {% else %}
+                            Nofaol
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="
+            margin-bottom:18px;
+            padding:16px 18px;
+            border-radius:18px;
+            background:#fff7ed;
+            border:1px solid #fdba74;
+            color:#c2410c;
+            font-size:15px;
+            line-height:1.7;
+        ">
+            <strong>Diqqat:</strong> agar siz bu topshiriqni o‘chirsangiz, unga bog‘liq ma’lumotlar ham ta’sirlanishi mumkin.
+        </div>
+
+        {% if submissions_exist %}
+            <div style="
+                margin-bottom:18px;
+                padding:18px;
+                border-radius:18px;
+                background:#fef2f2;
+                border:1px solid #fecaca;
+                color:#b91c1c;
+                line-height:1.7;
+            ">
+                <strong>Bu topshiriq bo‘yicha natijalar mavjud.</strong><br>
+                Shu sabab uni butunlay o‘chirish tavsiya etilmaydi. Eng xavfsiz yo‘l —
+                topshiriqni <strong>nofaol holatga o‘tkazish</strong>.
+            </div>
+
+            <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:8px;">
+                <a
+                    href="{% url 'teacher_assignments' %}"
+                    style="
+                        text-decoration:none;
+                        border-radius:16px;
+                        padding:14px 22px;
+                        background:#f8fafc;
+                        border:1px solid #dbe3f0;
+                        color:#5b6b8c;
+                        font-size:15px;
+                        font-weight:700;
+                        display:inline-flex;
+                        align-items:center;
+                        justify-content:center;
+                    "
+                >
+                    Ortga qaytish
+                </a>
+
+                <form method="post" action="{% url 'assignment_toggle_active' assignment.id %}" style="margin:0;">
+                    {% csrf_token %}
+                    <button
+                        type="submit"
+                        style="
+                            border:none;
+                            border-radius:16px;
+                            padding:14px 22px;
+                            background:linear-gradient(135deg, #7aa2ff, #5c87f2);
+                            color:white;
+                            font-size:15px;
+                            font-weight:700;
+                            cursor:pointer;
+                            box-shadow:0 10px 20px rgba(92, 135, 242, 0.22);
+                        "
+                    >
+                        {% if assignment.is_active %}
+                            Nofaol qilish
+                        {% else %}
+                            Faol qilish
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+
+        {% else %}
+            <div style="
+                margin-bottom:18px;
+                padding:18px;
+                border-radius:18px;
+                background:#f9fafb;
+                border:1px solid #e5e7eb;
+                color:#374151;
+                line-height:1.7;
+            ">
+                Siz rostdan ham <strong>{{ assignment.title }}</strong> topshirig‘ini o‘chirmoqchimisiz?
+                Bu amalni keyin ortga qaytarib bo‘lmaydi.
+            </div>
+
+            <form method="post" style="margin-top:8px;">
+                {% csrf_token %}
+                <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                    <button
+                        type="submit"
+                        style="
+                            border:none;
+                            border-radius:16px;
+                            padding:14px 22px;
+                            background:linear-gradient(135deg, #ef4444, #dc2626);
+                            color:white;
+                            font-size:15px;
+                            font-weight:700;
+                            cursor:pointer;
+                            box-shadow:0 10px 20px rgba(220, 38, 38, 0.20);
+                        "
+                    >
+                        Ha, o‘chirish
+                    </button>
+
+                    <a
+                        href="{% url 'teacher_assignments' %}"
+                        style="
+                            text-decoration:none;
+                            border-radius:16px;
+                            padding:14px 22px;
+                            background:#f8fafc;
+                            border:1px solid #dbe3f0;
+                            color:#5b6b8c;
+                            font-size:15px;
+                            font-weight:700;
+                            display:inline-flex;
+                            align-items:center;
+                            justify-content:center;
+                        "
+                    >
+                        Bekor qilish
+                    </a>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

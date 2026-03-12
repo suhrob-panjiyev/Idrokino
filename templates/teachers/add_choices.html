@@ -1,0 +1,334 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Variant qo‘shish{% endblock %}
+
+{% block content %}
+<style>
+    .pretty-shell{
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .pretty-page-title{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+    }
+
+    .pretty-page-title .icon{
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+    }
+
+    .pretty-page-title h1{
+        margin: 0;
+        font-size: 42px;
+        color: #243b6b;
+        font-weight: 800;
+    }
+
+    .pretty-page-title p{
+        margin: 6px 0 0 0;
+        color: #6b7280;
+        font-size: 17px;
+    }
+
+    .top-info-card{
+        background: linear-gradient(135deg, #eef4ff, #f8fbff);
+        border: 1px solid #dbe7ff;
+        border-radius: 22px;
+        padding: 20px 22px;
+        margin-bottom: 22px;
+    }
+
+    .top-info-card .line{
+        margin-bottom: 8px;
+        color: #334155;
+        font-weight: 600;
+    }
+
+    .top-info-card .line:last-child{
+        margin-bottom: 0;
+    }
+
+    .top-info-card strong{
+        color: #1e3a8a;
+    }
+
+    .pretty-card{
+        background: rgba(255,255,255,0.92);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .section-title{
+        margin: 0 0 18px 0;
+        font-size: 24px;
+        font-weight: 800;
+        color: #243b6b;
+    }
+
+    .form-grid{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .form-group{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-label{
+        font-size: 16px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .form-input{
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1.5px solid #dbe4f3;
+        background: #f9fbff;
+        font-size: 16px;
+        outline: none;
+        transition: .2s ease;
+    }
+
+    .form-input:focus{
+        border-color: #7aa2ff;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.15);
+    }
+
+    .checkbox-row{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+        padding: 14px 16px;
+        border: 1.5px solid #dbe4f3;
+        border-radius: 16px;
+        background: #f9fbff;
+    }
+
+    .form-checkbox{
+        width: 20px;
+        height: 20px;
+        accent-color: #5b8def;
+    }
+
+    .help-text{
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 2px;
+    }
+
+    .error-text{
+        color: #b91c1c;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .tip-box{
+        background: linear-gradient(135deg, #fff7ed, #fffbeb);
+        border: 1px solid #fde68a;
+        border-radius: 18px;
+        padding: 18px;
+        color: #92400e;
+        margin-top: 18px;
+    }
+
+    .actions{
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+    }
+
+    .btn-soft{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 28px;
+        border-radius: 18px;
+        text-decoration: none;
+        font-weight: 800;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: .2s ease;
+    }
+
+    .btn-primary-soft{
+        background: linear-gradient(135deg, #5b8def, #7aa2ff);
+        color: white;
+        box-shadow: 0 12px 24px rgba(91, 141, 239, 0.25);
+    }
+
+    .btn-light-soft{
+        background: #f8fafc;
+        color: #4373d9;
+        border: 1px solid #e2e8f0;
+    }
+
+    .choices-card{
+        margin-top: 24px;
+        background: rgba(255,255,255,0.92);
+        border-radius: 28px;
+        padding: 26px;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .choices-list{
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 16px;
+    }
+
+    .choice-item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: #f8fbff;
+        border: 1px solid #edf2ff;
+        flex-wrap: wrap;
+    }
+
+    .choice-badge-correct{
+        background: #dcfce7;
+        color: #166534;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .choice-badge-normal{
+        background: #eef2ff;
+        color: #334155;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .empty-box{
+        text-align: center;
+        padding: 28px 16px;
+        color: #6b7280;
+    }
+
+    .empty-box .emoji{
+        font-size: 46px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="pretty-shell">
+    <div class="pretty-page-title">
+        <div class="icon">✅</div>
+        <div>
+            <h1>Variant qo‘shish</h1>
+            <p>Savol uchun javob variantlarini kiriting va to‘g‘ri javobni belgilang.</p>
+        </div>
+    </div>
+
+    <div class="top-info-card">
+        <div class="line"><strong>Topshiriq:</strong> {{ assignment.title }}</div>
+        <div class="line"><strong>Savol:</strong> {{ question.text }}</div>
+    </div>
+
+    <div class="pretty-card">
+        <h2 class="section-title">Yangi variant</h2>
+
+        {% if error_message %}
+            <div class="error-text" style="margin-bottom:16px;">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.text.id_for_label }}">Variant matni</label>
+                    {{ form.text }}
+                    {% if form.text.errors %}
+                        <div class="error-text">{{ form.text.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Masalan: 4, 5, 6, 7</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">To‘g‘ri javob</label>
+                    <div class="checkbox-row">
+                        {{ form.is_correct }}
+                        <span>Bu variant to‘g‘ri javob bo‘lsin</span>
+                    </div>
+                    {% if form.is_correct.errors %}
+                        <div class="error-text">{{ form.is_correct.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="tip-box">
+                💡 Har bir savolda faqat bitta to‘g‘ri javob bo‘lishi tavsiya etiladi.
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-soft btn-primary-soft">Variantni saqlash</button>
+                <button type="submit" name="save_and_finish" value="1" class="btn-soft btn-light-soft">
+                    Saqlash va tugatish
+                </button>
+                <a href="{% url 'add_question' assignment.id %}" class="btn-soft btn-light-soft">Yana savol qo‘shish</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="choices-card">
+        <h2 class="section-title">Mavjud variantlar</h2>
+
+        {% if choices %}
+            <div class="choices-list">
+                {% for choice in choices %}
+                    <div class="choice-item">
+                        <div style="font-weight:700; color:#1f2937;">
+                            {{ choice.text }}
+                        </div>
+
+                        {% if choice.is_correct %}
+                            <div class="choice-badge-correct">To‘g‘ri javob</div>
+                        {% else %}
+                            <div class="choice-badge-normal">Oddiy variant</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-box">
+                <div class="emoji">📭</div>
+                <div>Hozircha variantlar yo‘q. Birinchi variantni qo‘shing.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

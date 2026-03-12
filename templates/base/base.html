@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Idrokino{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="/" class="logo">
+                <span class="logo-icon">⭐</span>
+                <div class="logo-group">
+                    <span class="logo-text">Idrokino</span>
+                    <small class="logo-subtext">Ta’lim endi qiziqarli</small>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/">Bosh sahifa</a>
+                <a href="#features">Afzalliklar</a>
+                <a href="#how-it-works">Qanday ishlaydi</a>
+                <a href="#rewards">Mukofotlar</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="{% url 'login' %}" class="btn btn-sm btn-secondary">Kirish</a>
+                <a href="{% url 'register' %}" class="btn btn-sm btn-primary">Boshlash</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <span class="logo-icon">⭐</span>
+                    <div class="logo-group">
+                        <span class="logo-text">Idrokino</span>
+                        <small class="logo-subtext">Gamification asosidagi ta’lim platformasi</small>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    Boshlang‘ich sinf o‘quvchilari uchun qiziqarli, qulay va motivatsion ta’lim muhiti.
+                </p>
+            </div>
+
+            <div class="footer-links-block">
+                <h4>Sahifalar</h4>
+                <a href="/">Bosh sahifa</a>
+                <a href="{% url 'login' %}">Kirish</a>
+                <a href="{% url 'register' %}">Ro‘yxatdan o‘tish</a>
+            </div>
+
+            <div class="footer-links-block">
+                <h4>Rollar</h4>
+                <a href="#">Student</a>
+                <a href="#">Teacher</a>
+                <a href="#">Parent</a>
+            </div>
+
+            <div class="footer-links-block">
+                <h4>Idrokino</h4>
+                <a href="#features">Afzalliklar</a>
+                <a href="#how-it-works">Qanday ishlaydi</a>
+                <a href="#rewards">Mukofotlar</a>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2026 Idrokino. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

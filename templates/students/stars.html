@@ -1,0 +1,47 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block dashboard_role %}Student panel{% endblock %}
+{% block dashboard_title %}Yulduzlar{% endblock %}
+{% block dashboard_subtitle %}
+Bu yerda yulduzlaringiz va keyingi maqsadingiz ko‘rinadi.
+{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'student_dashboard' %}">🏠 Bosh sahifa</a>
+<a href="{% url 'student_assignments' %}">📝 Topshiriqlar</a>
+<a href="{% url 'student_stars' %}" class="active">⭐ Yulduzlar</a>
+<a href="{% url 'collection' %}">🎁 Mukofotlar</a>
+<a href="{% url 'student_results' %}">📊 Natijalar</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <h3>Jami yulduzlar</h3>
+        <strong>{{ student_profile.stars }}</strong>
+        <p>Siz yig‘gan barcha yulduzlar</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <h3>Keyingi maqsad</h3>
+        <strong>{{ next_goal }}</strong>
+        <p>Keyingi mukofot uchun kerak bo‘ladigan yulduz</p>
+    </div>
+</div>
+
+<div class="progress-card">
+    <h2>Yulduz rivojlanish</h2>
+    <p>Keyingi bosqichga qancha qolganini shu yerda ko‘rasiz.</p>
+
+    <div class="progress-line">
+        <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
+    </div>
+
+    <div class="progress-meta">
+        <span>{{ progress_percent }}% tayyor</span>
+        <span>Maqsad: {{ next_goal }} ⭐</span>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,221 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Fan yaratish{% endblock %}
+
+{% block content %}
+<style>
+    .pretty-shell{
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .pretty-page-title{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+    }
+
+    .pretty-page-title .icon{
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+    }
+
+    .pretty-page-title h1{
+        margin: 0;
+        font-size: 46px;
+        color: #243b6b;
+        font-weight: 800;
+    }
+
+    .pretty-page-title p{
+        margin: 6px 0 0 0;
+        color: #6b7280;
+        font-size: 17px;
+    }
+
+    .pretty-card{
+        background: rgba(255,255,255,0.9);
+        border-radius: 28px;
+        padding: 34px;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf2ff;
+    }
+
+    .form-grid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group.full{
+        grid-column: 1 / -1;
+    }
+
+    .form-label{
+        font-size: 16px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .form-input{
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1.5px solid #dbe4f3;
+        background: #f9fbff;
+        font-size: 16px;
+        outline: none;
+        transition: .2s ease;
+    }
+
+    .form-input:focus{
+        border-color: #7aa2ff;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.15);
+    }
+
+    .help-text{
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .error-text{
+        color: #b91c1c;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .actions{
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+    }
+
+    .btn-soft{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 28px;
+        border-radius: 18px;
+        text-decoration: none;
+        font-weight: 800;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: .2s ease;
+    }
+
+    .btn-primary-soft{
+        background: linear-gradient(135deg, #5b8def, #7aa2ff);
+        color: white;
+        box-shadow: 0 12px 24px rgba(91, 141, 239, 0.25);
+    }
+
+    .btn-primary-soft:hover{
+        transform: translateY(-1px);
+    }
+
+    .btn-light-soft{
+        background: #f8fafc;
+        color: #4373d9;
+        border: 1px solid #e2e8f0;
+    }
+
+    .preview-box{
+        background: linear-gradient(135deg, #eef4ff, #f8faff);
+        border: 1px dashed #c7d7ff;
+        border-radius: 20px;
+        padding: 20px;
+        margin-top: 10px;
+        color: #4b5563;
+    }
+
+    @media (max-width: 768px){
+        .form-grid{
+            grid-template-columns: 1fr;
+        }
+
+        .pretty-page-title h1{
+            font-size: 34px;
+        }
+
+        .pretty-card{
+            padding: 22px;
+        }
+    }
+</style>
+
+<div class="pretty-shell">
+    <div class="pretty-page-title">
+        <div class="icon">📚</div>
+        <div>
+            <h1>Yangi fan yaratish</h1>
+            <p>O‘quvchilar uchun yangi fan qo‘shing va uni kerakli sinfga biriktiring.</p>
+        </div>
+    </div>
+
+    <div class="pretty-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="error-text" style="margin-bottom:16px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="error-text">{{ form.title.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Masalan: Matematika, Ona tili, Ingliz tili</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.class_group.id_for_label }}">{{ form.class_group.label }}</label>
+                    {{ form.class_group }}
+                    {% if form.class_group.errors %}
+                        <div class="error-text">{{ form.class_group.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="help-text">Bu fan qaysi sinf uchun ekanini tanlang</div>
+                </div>
+
+                <div class="form-group full">
+                    <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <div class="error-text">{{ form.image.errors|striptags }}</div>
+                    {% endif %}
+                    <div class="preview-box">
+                        Fan rasmi ixtiyoriy. Rasm qo‘shsangiz, fan kartasi yanada chiroyli ko‘rinadi.
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-soft btn-primary-soft">Saqlash</button>
+                <a href="{% url 'teacher_dashboard' %}" class="btn-soft btn-light-soft">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
