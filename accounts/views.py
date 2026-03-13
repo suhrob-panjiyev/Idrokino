@@ -5,6 +5,13 @@ from .forms import RegisterForm
 from academics.models import StudentProfile, TeacherProfile, ParentProfile
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import RegisterForm
+from academics.models import StudentProfile, TeacherProfile, ParentProfile
+
+
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -13,15 +20,21 @@ def register_view(request):
 
             if user.role == 'student':
                 StudentProfile.objects.create(user=user)
-
             elif user.role == 'teacher':
                 TeacherProfile.objects.create(user=user)
-
             elif user.role == 'parent':
                 ParentProfile.objects.create(user=user)
 
             login(request, user)
-            return redirect('home')
+
+            if user.role == "student":
+                return redirect("student_dashboard")
+            elif user.role == "teacher":
+                return redirect("teacher_dashboard")
+            elif user.role == "parent":
+                return redirect("parent_dashboard")
+
+            return redirect("home")
     else:
         form = RegisterForm()
 

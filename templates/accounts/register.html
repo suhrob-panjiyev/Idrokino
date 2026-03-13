@@ -77,6 +77,43 @@
                     Akkauntingiz bormi?
                     <a href="{% url 'login' %}">Kirish</a>
                 </p>
+
+                <button type="button" class="demo-btn" onclick="toggleDemoBox()">
+                    🚀 Demo akkauntlar orqali sinab ko‘ring
+                </button>
+
+                <div id="demoBox" class="demo-panel" style="display: none;">
+                    <p><b>Platformani test qilish uchun quyidagi loginlardan foydalaning:</b></p>
+
+                    <div class="demo-card">
+                        <b>👨‍🏫 O‘qituvchi</b><br>
+                        Login: teacher_test <br>
+                        Parol: Idrokino2026!
+                    </div>
+
+                    <div class="demo-card">
+                        <b>👨‍🎓 O‘quvchi</b><br>
+                        Login: suhrobpanjiyev <br>
+                        Parol: username2005
+                    </div>
+
+                    <div class="demo-card">
+                        <b>👨‍👩‍👧 Ota-ona</b><br>
+                        Login: parent_test_1 <br>
+                        Parol: Idrokino2026!
+                    </div>
+                </div>
+
+                <script>
+                function toggleDemoBox() {
+                    const box = document.getElementById("demoBox");
+                    if (box.style.display === "none") {
+                        box.style.display = "block";
+                    } else {
+                        box.style.display = "none";
+                    }
+                }
+                </script>
             </div>
 
             <div class="auth-right">
